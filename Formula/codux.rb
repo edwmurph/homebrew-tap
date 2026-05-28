@@ -4,61 +4,28 @@ class Codux < Formula
 
   desc "Coordinate multiple Codex sessions from a single tmux workspace"
   homepage "https://github.com/edwmurph/codux"
-  url "https://github.com/edwmurph/codux/releases/download/v0.2.1/codux-0.2.1.tar.gz"
-  sha256 "5aaf489aa230f9fc2892ca9f2a8afb1000f012f575b2ef212fe7e91e6ad9855b"
+  url "https://github.com/edwmurph/codux/releases/download/v0.2.2/codux-0.2.2.tar.gz"
+  sha256 "6547227ab4a813dc4ff10412a7755e51493b0c338286644c7f59bd4099d30533"
   license "MIT"
 
   depends_on "python@3.13"
   depends_on "tmux"
 
   resource "codux-wheel" do
-    url "https://github.com/edwmurph/codux/releases/download/v0.2.1/codux-0.2.1-py3-none-any.whl"
-    sha256 "1afcd9eef7441e9f65487c9209aebd7105c00c9d984c45aa9607895a9ee7cbad"
+    url "https://github.com/edwmurph/codux/releases/download/v0.2.2/codux-0.2.2-py3-none-any.whl"
+    sha256 "cf952d9f763fb0dde910619c7c67b6565e365a882170aa305689a878273ebe59"
   end
 
-  resource "mdurl" do
-    url "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl"
-    sha256 "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
-  end
-
-  resource "markdown-it-py" do
-    url "https://files.pythonhosted.org/packages/b3/81/4da04ced5a082363ecfa159c010d200ecbd959ae410c10c0264a38cac0f5/markdown_it_py-4.2.0-py3-none-any.whl"
-    sha256 "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a"
-  end
-
-  resource "pygments" do
-    url "https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl"
-    sha256 "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176"
-  end
-
-  resource "rich" do
-    url "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl"
-    sha256 "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"
-  end
-
-  resource "annotated-doc" do
-    url "https://files.pythonhosted.org/packages/1e/d3/26bf1008eb3d2daa8ef4cacc7f3bfdc11818d111f7e2d0201bc6e3b49d45/annotated_doc-0.0.4-py3-none-any.whl"
-    sha256 "571ac1dc6991c450b25a9c2d84a3705e2ae7a53467b5d111c24fa8baabbed320"
-  end
-
-  resource "click" do
-    url "https://files.pythonhosted.org/packages/c7/0d/67e5b4109ea4a837e80daa87c2c696711955e40449a97e8926672534def2/click-8.4.1-py3-none-any.whl"
-    sha256 "482be17c6991b8c19c5429a1e995d9b0efdbb63172824c41f99965dc0ade8ec2"
-  end
-
-  resource "shellingham" do
-    url "https://files.pythonhosted.org/packages/e0/f9/0595336914c5619e5f28a1fb793285925a8cd4b432c9da0a987836c7f822/shellingham-1.5.4-py2.py3-none-any.whl"
-    sha256 "7ecfff8f2fd72616f7481040475a65b2bf8af90a56c89140852d1120324e8686"
-  end
-
-  resource "typer" do
-    url "https://files.pythonhosted.org/packages/3f/f9/2b3ff4e56e5fa7debfaf9eb135d0da96f3e9a1d5b27222223c7296336e5f/typer-0.25.1-py3-none-any.whl"
-    sha256 "75caa44ed46a03fb2dab8808753ffacdbfea88495e74c85a28c5eefcf5f39c89"
+  resource "codux-wheelhouse" do
+    url "https://github.com/edwmurph/codux/releases/download/v0.2.2/codux-0.2.2-wheelhouse.tar.gz"
+    sha256 "d13d2eb99a96f17b72f66480b43b45e5109c6f0b2bfc86acf39c190af456c957"
   end
 
   def install
     venv = virtualenv_create(libexec, "python3.13")
-    venv.pip_install resources.reject { |resource| resource.name == "codux-wheel" }
+    resource("codux-wheelhouse").stage do
+      venv.pip_install Dir["*.whl"].sort
+    end
     resource("codux-wheel").stage do
       venv.pip_install_and_link Pathname.pwd/"codux-#{version}-py3-none-any.whl"
     end
