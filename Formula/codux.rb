@@ -4,21 +4,21 @@ class Codux < Formula
 
   desc "Coordinate multiple Codex sessions from a single tmux workspace"
   homepage "https://github.com/edwmurph/codux"
-  url "https://github.com/edwmurph/codux/releases/download/v0.3.0/codux-0.3.0.tar.gz"
-  sha256 "cde2c6648328150a8a803cf5b705a61cc4682ed3e86ac06dd64d552f40978831"
+  url "https://github.com/edwmurph/codux/releases/download/v0.3.1/codux-0.3.1.tar.gz"
+  sha256 "fd5f7dc819f1e5bc42de6bcb22406f94c5c7109219b2f3a1463652450ac8b60b"
   license "MIT"
 
   depends_on "python@3.13"
   depends_on "tmux"
 
   resource "codux-wheel" do
-    url "https://github.com/edwmurph/codux/releases/download/v0.3.0/codux-0.3.0-py3-none-any.whl"
-    sha256 "794ad2cef2d8e64a92a1a40f682a247c7a490aa17be19315fd35bcb4cc91b16e"
+    url "https://github.com/edwmurph/codux/releases/download/v0.3.1/codux-0.3.1-py3-none-any.whl"
+    sha256 "f226c8eaf105b34447c8361e9d3ab433d70f121d2333017a15745e51fb5e4023"
   end
 
   resource "codux-wheelhouse" do
-    url "https://github.com/edwmurph/codux/releases/download/v0.3.0/codux-0.3.0-wheelhouse.tar.gz"
-    sha256 "e76b091b0d8c290955134635d53efc918c0e53c5d164a09b51a4bbcc976eabc9"
+    url "https://github.com/edwmurph/codux/releases/download/v0.3.1/codux-0.3.1-wheelhouse.tar.gz"
+    sha256 "a61c584c8248b4c49cc7f2077253c2564eff44d3aae083c30cf08100800e59f0"
   end
 
   def install
