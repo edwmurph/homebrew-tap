@@ -2,8 +2,8 @@
 class Codux < Formula
   desc "Coordinate multiple Codex sessions from a single tmux workspace"
   homepage "https://github.com/edwmurph/codux"
-  url "https://github.com/edwmurph/codux/archive/refs/tags/v2.0.2.tar.gz"
-  sha256 "8c2d5ccb5a0894ef30742959de0b3bf2bc83e22cc351c719f72f97607729db56"
+  url "https://github.com/edwmurph/codux/archive/refs/tags/v2.0.3.tar.gz"
+  sha256 "eab9bf5f7e8e92a1fc5db4d2bbc783cc53b701c3dcec1eaa37dcba5a5b696368"
   license "MIT"
 
   depends_on "go" => :build
@@ -14,7 +14,7 @@ class Codux < Formula
   end
 
   test do
-    assert_match "Start, inspect, or detach Codux tmux workspaces", shell_output("#{bin}/codux --help")
+    assert_match "Start, inspect, or close Codux tmux workspaces", shell_output("#{bin}/codux --help")
     assert_match "tmux", shell_output("#{bin}/codux doctor")
   end
 end
