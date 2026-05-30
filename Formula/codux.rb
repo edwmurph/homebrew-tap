@@ -2,8 +2,8 @@
 class Codux < Formula
   desc "Coordinate multiple Codex sessions from a single tmux workspace"
   homepage "https://github.com/edwmurph/codux"
-  url "https://github.com/edwmurph/codux/archive/refs/tags/v2.0.3.tar.gz"
-  sha256 "eab9bf5f7e8e92a1fc5db4d2bbc783cc53b701c3dcec1eaa37dcba5a5b696368"
+  url "https://github.com/edwmurph/codux/archive/refs/tags/v2.0.4.tar.gz"
+  sha256 "a957bd27b2a91ac7aa33baa202dadab02456d2f36dc064624daf068a68ca825c"
   license "MIT"
 
   depends_on "go" => :build
