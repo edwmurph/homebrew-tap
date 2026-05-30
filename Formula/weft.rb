@@ -2,8 +2,8 @@
 class Weft < Formula
   desc "Coordinate multiple Codex sessions from one supervisor-backed TUI"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v5.0.0.tar.gz"
-  sha256 "6b14222c59dd4545fd09a360a652ba323ffed709ab748af4a1949c99f3d24c17"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v5.0.1.tar.gz"
+  sha256 "0591975a13920515118f8c688c57336876189c374bf4cb7093369e3af141f85e"
   license "MIT"
 
   depends_on "go" => :build
