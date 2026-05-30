@@ -2,8 +2,8 @@
 class Weft < Formula
   desc "Coordinate multiple Codex sessions from one supervisor-backed TUI"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v5.4.0.tar.gz"
-  sha256 "74fc1ab493e49f95985402d22885dabe0bcc7868849a6df9d99c702b790100ba"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v5.5.0.tar.gz"
+  sha256 "9bac291e8212efb97e350627000425d89d498d039ae931690a7fe17ef0bc4c58"
   license "MIT"
 
   depends_on "go" => :build
@@ -14,7 +14,7 @@ class Weft < Formula
 
   test do
     ENV["WEFT_HOME"] = testpath/"weft-home"
-    ENV["WEFT_WORKDIR"] = testpath
+    ENV["WEFT_WORKSPACE"] = testpath
     assert_match "Supervisor-backed Codex command center", shell_output("#{bin}/weft --help")
     assert_match "supervisor owns Codex PTYs", shell_output("#{bin}/weft doctor")
   end
