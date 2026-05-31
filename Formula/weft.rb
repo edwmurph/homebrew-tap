@@ -2,8 +2,8 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex agent threads"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v7.2.0.tar.gz"
-  sha256 "d13ff0a902a9ff4cfc56905ce3b5680af0369401a4a21f473ac7d4c37f3a98a5"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v7.3.0.tar.gz"
+  sha256 "42aa4df20662c542f5430406e66e9dbd404662f29b94bd8e1198f739cf7186b2"
   license "MIT"
 
   depends_on "go" => :build
@@ -13,8 +13,7 @@ class Weft < Formula
   end
 
   test do
-    ENV["WEFT_HOME"] = testpath/"weft-home"
-    ENV["WEFT_WORKSPACE"] = testpath
+    ENV["WEFT_ROOT"] = testpath
     assert_match "Terminal dashboard for Codex agent threads", shell_output("#{bin}/weft --help")
     assert_match "supervisor owns Codex PTYs", shell_output("#{bin}/weft doctor")
   end
