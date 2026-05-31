@@ -2,8 +2,8 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex agent threads"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v7.13.3.tar.gz"
-  sha256 "701d1c65575b11ed6b07fcd31d78a4a59a8c29717a15712349fc11a7ceb156af"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v7.13.4.tar.gz"
+  sha256 "7ce73297761227b47b74217c0c7f068e5a2aa52e44bc8e429464b2aa5123ff54"
   license "MIT"
 
   depends_on "go" => :build
