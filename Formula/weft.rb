@@ -2,8 +2,8 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex and shell tasks"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.4.2.tar.gz"
-  sha256 "6b65a0cf2998143c801bac14a9a6c9c65befcaf47ce6b14c4e6c621177ceab7c"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.5.0.tar.gz"
+  sha256 "5a0fae0d6362c7cb6fb8c8ec8840dbd2690a35981e1366c29a8ba1cf3ad39788"
   license "MIT"
 
   depends_on "go" => :build
@@ -11,6 +11,7 @@ class Weft < Formula
   def install
     system "go", "build", "-ldflags", "-X github.com/edwmurph/weft/internal/version.Version=#{version} -X github.com/edwmurph/weft/internal/version.BuildChannel=release", "-o", bin/"weft", "./cmd/weft"
   end
+
 
   test do
     ENV["WEFT_ROOT"] = testpath
