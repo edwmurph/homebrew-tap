@@ -21,6 +21,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Trust tap
+        run: brew trust "${GITHUB_REPOSITORY/homebrew-/}"
+
       - name: Set up git
         uses: Homebrew/actions/git-user-config@main
 
