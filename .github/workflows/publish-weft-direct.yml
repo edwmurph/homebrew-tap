@@ -1,0 +1,136 @@
+name: publish weft bottle directly
+
+on:
+  workflow_dispatch:
+    inputs:
+      formula:
+        description: "Formula name to bottle"
+        required: true
+        default: weft
+        type: string
+      version:
+        description: "Formula version to publish"
+        required: true
+        type: string
+
+run-name: "Publish ${{ inputs.formula }} ${{ inputs.version }} bottle"
+
+jobs:
+  build-bottle:
+    runs-on: macos-26
+    env:
+      BOTTLE_ROOT_URL: https://github.com/edwmurph/homebrew-tap/releases/download/${{ inputs.formula }}-${{ inputs.version }}
+      FORMULA: ${{ inputs.formula }}
+      HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
+    permissions:
+      actions: read
+      checks: read
+      contents: read
+    steps:
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Homebrew Bundler RubyGems
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: macos-26-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: macos-26-rubygems-
+
+      - run: brew test-bot --only-cleanup-before
+
+      - name: Trust tap
+        run: brew trust edwmurph/tap
+
+      - run: brew test-bot --only-setup
+
+      - run: brew test-bot --only-tap-syntax
+
+      - name: Build bottle
+        run: brew test-bot --only-formulae --testing-formulae="edwmurph/tap/${FORMULA}" --root-url="$BOTTLE_ROOT_URL" --skip-dependents
+
+      - name: Upload bottle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bottles-macos-26
+          path: "*.bottle.*"
+
+  publish-bottle:
+    needs: build-bottle
+    runs-on: ubuntu-latest
+    env:
+      BOTTLE_TAG: ${{ inputs.formula }}-${{ inputs.version }}
+      FORMULA: ${{ inputs.formula }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
+      VERSION: ${{ inputs.version }}
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trust tap
+        run: brew trust edwmurph/tap
+
+      - name: Set up git
+        uses: Homebrew/actions/git-user-config@main
+
+      - name: Download bottle artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: bottles-*
+          path: dist/bottles
+          merge-multiple: true
+
+      - name: Publish bottle assets and update formula
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          tap_dir="$(brew --repository "$GITHUB_REPOSITORY")"
+          cd "$tap_dir"
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+
+          mapfile -t bottle_files < <(find "$GITHUB_WORKSPACE/dist/bottles" -name "*.bottle.tar.gz" -print | sort)
+          mapfile -t bottle_json < <(find "$GITHUB_WORKSPACE/dist/bottles" -name "*.bottle.json" -print | sort)
+
+          if [[ "${#bottle_files[@]}" -eq 0 ]]; then
+            echo "::error::No bottle tarballs were downloaded."
+            exit 1
+          fi
+          if [[ "${#bottle_json[@]}" -eq 0 ]]; then
+            echo "::error::No bottle JSON files were downloaded."
+            exit 1
+          fi
+
+          if gh release view "$BOTTLE_TAG" >/dev/null 2>&1; then
+            gh release edit "$BOTTLE_TAG" \
+              --title "$BOTTLE_TAG" \
+              --notes "Homebrew bottles for ${FORMULA} ${VERSION}."
+          else
+            gh release create "$BOTTLE_TAG" \
+              --title "$BOTTLE_TAG" \
+              --notes "Homebrew bottles for ${FORMULA} ${VERSION}."
+          fi
+          gh release upload "$BOTTLE_TAG" "${bottle_files[@]}" --clobber
+
+          brew bottle --merge --write --no-commit --no-rebuild "${bottle_json[@]}"
+          git add "Formula/${FORMULA}.rb"
+          if git diff --cached --quiet; then
+            echo "Formula/${FORMULA}.rb already has the bottle block for ${VERSION}."
+            exit 0
+          fi
+
+          git commit -m "${FORMULA}: add ${VERSION} bottle."
+          git pull --rebase origin main
+          git push origin HEAD:main
