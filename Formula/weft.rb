@@ -12,7 +12,6 @@ class Weft < Formula
     system "go", "build", "-ldflags", "-X github.com/edwmurph/weft/internal/version.Version=#{version} -X github.com/edwmurph/weft/internal/version.BuildChannel=release", "-o", bin/"weft", "./cmd/weft"
   end
 
-
   test do
     ENV["WEFT_ROOT"] = testpath
     assert_match "Terminal dashboard for Codex and shell tasks", shell_output("#{bin}/weft --help")
