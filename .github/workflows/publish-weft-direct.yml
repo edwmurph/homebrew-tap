@@ -113,6 +113,16 @@ jobs:
             exit 1
           fi
 
+          upload_dir="$GITHUB_WORKSPACE/dist/upload"
+          mkdir -p "$upload_dir"
+          upload_files=()
+          for bottle_file in "${bottle_files[@]}"; do
+            bottle_name="$(basename "$bottle_file")"
+            upload_name="${bottle_name/${FORMULA}--${VERSION}/${FORMULA}-${VERSION}}"
+            cp "$bottle_file" "$upload_dir/$upload_name"
+            upload_files+=("$upload_dir/$upload_name")
+          done
+
           if gh release view "$BOTTLE_TAG" >/dev/null 2>&1; then
             gh release edit "$BOTTLE_TAG" \
               --title "$BOTTLE_TAG" \
@@ -122,7 +132,7 @@ jobs:
               --title "$BOTTLE_TAG" \
               --notes "Homebrew bottles for ${FORMULA} ${VERSION}."
           fi
-          gh release upload "$BOTTLE_TAG" "${bottle_files[@]}" --clobber
+          gh release upload "$BOTTLE_TAG" "${upload_files[@]}" --clobber
 
           brew bottle --merge --write --no-commit "${bottle_json[@]}"
           git add "Formula/${FORMULA}.rb"
