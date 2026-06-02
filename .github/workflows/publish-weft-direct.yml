@@ -101,8 +101,8 @@ jobs:
           git checkout main
           git reset --hard origin/main
 
-          mapfile -t bottle_files < <(find "$GITHUB_WORKSPACE/dist/bottles" -name "*.bottle.tar.gz" -print | sort)
-          mapfile -t bottle_json < <(find "$GITHUB_WORKSPACE/dist/bottles" -name "*.bottle.json" -print | sort)
+          mapfile -t bottle_files < <(find "$GITHUB_WORKSPACE/dist/bottles" -name "*.bottle*.tar.gz" -print | sort)
+          mapfile -t bottle_json < <(find "$GITHUB_WORKSPACE/dist/bottles" -name "*.bottle*.json" -print | sort)
 
           if [[ "${#bottle_files[@]}" -eq 0 ]]; then
             echo "::error::No bottle tarballs were downloaded."
@@ -124,7 +124,7 @@ jobs:
           fi
           gh release upload "$BOTTLE_TAG" "${bottle_files[@]}" --clobber
 
-          brew bottle --merge --write --no-commit --no-rebuild "${bottle_json[@]}"
+          brew bottle --merge --write --no-commit "${bottle_json[@]}"
           git add "Formula/${FORMULA}.rb"
           if git diff --cached --quiet; then
             echo "Formula/${FORMULA}.rb already has the bottle block for ${VERSION}."
