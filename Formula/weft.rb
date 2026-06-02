@@ -13,7 +13,7 @@ class Weft < Formula
   end
 
   def caveats
-    notes = <<~'WEFT_CAVEATS'
+    notes = <<~WEFT_CAVEATS
       This Weft release includes breaking changes.
 
       - Remove the temporary incompatible-supervisor shutdown fallback so stale pre-0.7 supervisors require explicit local cleanup instead of compatibility code.
@@ -26,7 +26,6 @@ class Weft < Formula
         https://github.com/edwmurph/weft/releases/tag/v#{version}
     EOS
   end
-
 
   test do
     ENV["WEFT_ROOT"] = testpath
