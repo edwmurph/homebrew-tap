@@ -2,29 +2,14 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex and shell tasks"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.6.0.tar.gz"
-  sha256 "372a5b6c046e4338a2f9018f780cae43e565ae9530302a6e32963eb6a1e6b584"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.7.0.tar.gz"
+  sha256 "467ca66e6e2dd237eafe853a7e7197a55f17b7c952e863afdeb84bd816a13336"
   license "MIT"
 
   depends_on "go" => :build
 
   def install
     system "go", "build", "-ldflags", "-X github.com/edwmurph/weft/internal/version.Version=#{version} -X github.com/edwmurph/weft/internal/version.BuildChannel=release", "-o", bin/"weft", "./cmd/weft"
-  end
-
-  def caveats
-    notes = <<~'WEFT_CAVEATS'
-      This Weft release includes breaking changes.
-
-      - Hard-cut IPC request metadata into typed protocol fields and reject old metadata-in-arguments requests.
-        Impact: Weft IPC protocol v2 is incompatible with already-running older supervisors that expect protocol v1 request metadata inside command arguments.
-        Migration: If an upgraded client reports an incompatible running supervisor, finish or stop any live tasks, then run `weft close --kill` when ready and reopen `weft`.
-    WEFT_CAVEATS
-    notes + <<~EOS
-
-      Full release notes:
-        https://github.com/edwmurph/weft/releases/tag/v#{version}
-    EOS
   end
 
 
