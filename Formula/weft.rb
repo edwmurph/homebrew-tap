@@ -2,14 +2,29 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex and shell tasks"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.7.1.tar.gz"
-  sha256 "57945f4e7865441cdb88232362feaf989a2157c845147efe954515b360d1d8e0"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.8.0.tar.gz"
+  sha256 "c50c69106c4ea77a7e0c7fb67798a9293d4285ae0d2513418bc11bfa323e9354"
   license "MIT"
 
   depends_on "go" => :build
 
   def install
     system "go", "build", "-ldflags", "-X github.com/edwmurph/weft/internal/version.Version=#{version} -X github.com/edwmurph/weft/internal/version.BuildChannel=release", "-o", bin/"weft", "./cmd/weft"
+  end
+
+  def caveats
+    notes = <<~'WEFT_CAVEATS'
+      This Weft release includes breaking changes.
+
+      - Remove the temporary incompatible-supervisor shutdown fallback so stale pre-0.7 supervisors require explicit local cleanup instead of compatibility code.
+        Impact: Weft no longer signals old incompatible supervisor PIDs when `weft close --kill` receives a protocol mismatch.
+        Migration: If an old supervisor is stuck after upgrade, create a backup, kill the recorded `~/.weft/weftd.pid` process, remove `~/.weft/weftd.pid` and `~/.weft/weft.sock`, then run `weft` again.
+    WEFT_CAVEATS
+    notes + <<~EOS
+
+      Full release notes:
+        https://github.com/edwmurph/weft/releases/tag/v#{version}
+    EOS
   end
 
 
