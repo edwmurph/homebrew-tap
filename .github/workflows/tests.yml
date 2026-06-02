@@ -25,9 +25,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Trust tap
-        run: brew trust edwmurph/tap
-
       - name: Cache Homebrew Bundler RubyGems
         uses: actions/cache@v4
         with:
@@ -36,6 +33,9 @@ jobs:
           restore-keys: ${{ matrix.os }}-rubygems-
 
       - run: brew test-bot --only-cleanup-before
+
+      - name: Trust tap
+        run: brew trust edwmurph/tap
 
       - run: brew test-bot --only-setup
 
