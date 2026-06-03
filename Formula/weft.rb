@@ -2,35 +2,14 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex and shell tasks"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.14.0.tar.gz"
-  sha256 "4962935f4fff3d2393ec2a3b2163525c2f27631ddabc6ea4de964bf36ce19522"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.14.1.tar.gz"
+  sha256 "8c8ec92ea27074bfd1b83f882cbb2d46e80c7248f6df6210e1eeb8ceb700002a"
   license "MIT"
-
-  bottle do
-    root_url "https://github.com/edwmurph/homebrew-tap/releases/download/weft-0.14.0"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_tahoe: "46c54c9123922f6c4fec81c3adaed2cdeeff9b30db3becfe7844b0d27d735e96"
-  end
 
   depends_on "go" => :build
 
   def install
     system "go", "build", "-ldflags", "-X github.com/edwmurph/weft/internal/version.Version=#{version} -X github.com/edwmurph/weft/internal/version.BuildChannel=release", "-o", bin/"weft", "./cmd/weft"
-  end
-
-  def caveats
-    notes = <<~WEFT_CAVEATS
-      This Weft release includes breaking changes.
-
-      - Add a checked-in task type definition registry so agent and command behavior lives with each task kind.
-        Impact: Persisted task metadata now uses state v6 with live_title, live_status, resume_id, and input_submitted, and task title templates now use {live} instead of retired {codex}.
-        Migration: Run `weft clear` if Weft reports unsupported old state, and update any task_types.*.title_template values from `{codex}` to `{live}`.
-    WEFT_CAVEATS
-    notes + <<~EOS
-
-      Full release notes:
-        https://github.com/edwmurph/weft/releases/tag/v#{version}
-    EOS
   end
 
   test do
