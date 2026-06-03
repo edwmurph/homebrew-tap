@@ -6,6 +6,12 @@ class Weft < Formula
   sha256 "1715a313c7514e8fe79ace994fbb66fe62c33523c25eeb989db49c0605fd23c1"
   license "MIT"
 
+  bottle do
+    root_url "https://github.com/edwmurph/homebrew-tap/releases/download/weft-0.15.0"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe: "cd1d428b098643821fda59f18ecdc3a9461dfdec9978184dce4e4fca75144280"
+  end
+
   depends_on "go" => :build
 
   def install
