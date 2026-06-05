@@ -2,15 +2,9 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex and shell tasks"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.18.0.tar.gz"
-  sha256 "f5c3aece20fc3466338ed8385798014058e8f9893819e723a1bd3f03b3f138ea"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.18.1.tar.gz"
+  sha256 "4dd8f08ce2c096c4087e4f1f68f94f08c514392e27f956c0d328d887276eee85"
   license "MIT"
-
-  bottle do
-    root_url "https://github.com/edwmurph/homebrew-tap/releases/download/weft-0.18.0"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_tahoe: "9a63fe13a2c09eafc4da3916162bac712d68896bd69bc5e23bef4a424235ef42"
-  end
 
   depends_on "go" => :build
 
