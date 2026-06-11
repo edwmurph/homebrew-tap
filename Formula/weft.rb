@@ -2,35 +2,14 @@
 class Weft < Formula
   desc "Terminal dashboard for Codex and shell tasks"
   homepage "https://github.com/edwmurph/weft"
-  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.21.0.tar.gz"
-  sha256 "4f5004fadd1cfb71747636c669096fe0da24574f491e3ce311dab94b5b2845fa"
+  url "https://github.com/edwmurph/weft/archive/refs/tags/v0.21.1.tar.gz"
+  sha256 "6cd9d208622ed491c5b5c86bfbd96aeac547abf4e57a4b95712a633578059319"
   license "MIT"
-
-  bottle do
-    root_url "https://github.com/edwmurph/homebrew-tap/releases/download/weft-0.21.0"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_tahoe: "d324ba3c0fd86dda205573fa7f8a37dc20b8deb75719154a85747e34fe4335ac"
-  end
 
   depends_on "go" => :build
 
   def install
     system "go", "build", "-ldflags", "-X github.com/edwmurph/weft/internal/version.Version=#{version} -X github.com/edwmurph/weft/internal/version.BuildChannel=release", "-o", bin/"weft", "./cmd/weft"
-  end
-
-  def caveats
-    notes = <<~WEFT_CAVEATS
-      This Weft release includes breaking changes.
-
-      - Dashboard mouse movement, clicks, and wheel or trackpad input no longer change focus, selection, preview scrollback, or task PTYs.
-        Impact: Dashboard mouse hover/click selection and Task Live Preview wheel or trackpad scrolling have been removed.
-        Migration: Use keyboard navigation and configured create/open keys in the dashboard. Open a task console for mouse-wheel scrollback.
-    WEFT_CAVEATS
-    notes + <<~EOS
-
-      Full release notes:
-        https://github.com/edwmurph/weft/releases/tag/v#{version}
-    EOS
   end
 
   test do
